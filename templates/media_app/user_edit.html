@@ -1,0 +1,43 @@
+
+{% load crispy_forms_tags %}
+
+{% block  content %}
+<!-- Side Modal Top Right -->
+
+<!-- Button trigger modal -->
+
+<!-- To change the direction of the modal animation change .right class -->
+
+
+  <!-- Add class .modal-side and then add class .modal-top-right (or other classes from list above) to set a position to the modal -->
+  <div class="modal-dialog modal-side modal-bottom-right" role="document">
+
+
+    <div class="modal-content">
+      <div class="modal-header success-color text-center text-white">
+        <h4 class="modal-title w-100 " id="myModalLabel">Edit Profile</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form id="my_form" method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+{#              <label for="bio" class="form-check-label mt-2">Biography</label>#}
+{#              <div id="bio" class="bio mt-2">{{ form.bio }}</div>#}
+{#              <label for="location" class="form-check-label mt-2">Location</label>#}
+{#              <div id="location" class="location mt-2">{{ form.location }}</div>#}
+{#              <div id="image_url" class="image_url">{{ form.image_url }}</div>#}
+{#              <p class="text-muted" style="color: red !important;"><small>please upload a valid jpeg/png file</small></p>#}
+              {{ form|crispy }}
+              <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="upload" type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+          </form>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}

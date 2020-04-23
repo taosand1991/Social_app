@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container-fluid mt-2">
+     <h2 class="text-center primary-color text-white">Search Result</h2>
+    <div class="row search">
+{% for friend in results %}
+    <div class="col-12 col-md-3 mt-2 ">
+    <div class="card">
+        {% if friend.image_url %}
+            <img class="card-img-top img-thumbnail sizing" src="{{ friend.image_url.url }}"  alt="No pic">
+            {% endif %}
+        <div class="card-body text-center">
+            <h2 class="card-title text-center"><a href="{% url 'profile_detail' friend.display_name %}"></a>{{ friend.display_name }}</h2>
+            <hr>
+            <p class="text-center">{{ friend.location }}</p>
+            {% if user in friend.friend_requests.all %}
+            <h3 class="text-muted">PENDING</h3>
+            <a class="btn btn-danger btn-sm" href="{% url 'canceled_request' friend.pk %}">CANCEL FRIEND REQUEST</a>
+            {% elif user in friend.friends.all %}
+            <p class="text-center">{{ friend.email }}</p>
+            {% else %}
+            <a class="btn btn-primary btn-sm" href="{% url 'add_friend' friend.pk %}">ADD FRIEND</a>
+            {% endif %}
+        </div>
+    </div>
+    </div>
+    {% empty %}
+    <h5 class="text-center">No search result!!!</h5>
+    {% endfor %}
+    </div>
+    <nav aria-label="Page navigation example mt-3">
+      {% if results.has_other_pages %}
+  <ul class="pagination pg-blue mt-3">
+      {% if results.has_previous %}
+      <li class="page-item">
+      <a href="?page={{ results.previous_page_number }}&q={{ query }}" class="page-link" tabindex="-1">Previous</a>
+    </li>
+      {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" tabindex="-1">Previous</a>
+    </li>
+      {% endif %}
+  {% for i in results.paginator.page_range %}
+    {% if results.number == i %}
+    <li class="page-item active">
+      <a  class="page-link">{{ i }} <span class="sr-only">(current)</span></a>
+    </li>
+    {% else %}
+    <li class="page-item"><a href="?page={{ i }}&q={{ query }}" class="page-link">{{ i }}</a></li>
+  {% endif %}
+  {% endfor %}
+  {% if results.has_next %}
+    <li class="page-item">
+      <a href="?page={{ results.next_page_number }}&q={{ query }}" class="page-link">Next</a>
+    </li>
+  {% else %}
+  <li class="page-item disabled">
+      <a class="page-link" tabindex="-1">Next</a>
+    </li>
+  {% endif %}
+  </ul>
+    {% endif %}
+</nav>
+  </div>
+{% endblock %}

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="{% static 'css/mdb.min.css' %}" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/master.css' %}">
+</head>
+{% include 'navbar.html' %}
+
+<body>
+{% block content %}
+
+{% endblock %}
+
+
+<!-- SCRIPTS -->
+<!-- JQuery -->
+<script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+{#<script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>#}
+<script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="{% static 'js/mdb.min.js' %}"></script>
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#loader').fadeOut('slow');
+        $(this).bind({
+            ajaxStart: function () {
+                $(this).show();
+            },
+            ajaxStop: function () {
+                $(this).hide();
+            }
+        });
+        let my_modal = $('#post_form');
+        let url = '{% url 'create' %}';
+        $('#mode').click(function () {
+            my_modal.load(url, function () {
+                my_modal.modal({show: true});
+                $('#click').click(function (e) {
+                    const form_post = $('#myform')[0];
+                    let form_pool = new FormData(form_post);
+                    e.preventDefault();
+                    $.ajax({
+                        method: "POST",
+                        dataType: "json",
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: form_pool,
+                        async: true,
+                        url: "{% url 'create' %}",
+                        beforeSend: function () {
+                            $('#loader').show();
+                        },
+                        success: function (response) {
+                            setTimeout(function () {
+                                alert(response.message);
+                                my_modal.modal('hide');
+                                window.location = "{% url 'home' %}"
+                            }, 2000)
+
+                        },
+                        error: function (error) {
+                            console.log(error)
+                        }
+                    })
+                })
+
+            })
+        });
+        let modal = $('#edit_form');
+        $('.postal').click(function () {
+            let id = $(this).attr('id');
+            let my_url = 'edit/' + id;
+            modal.load(my_url, function () {
+                modal.modal('show');
+                $('#editform').submit(function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        method: "POST",
+                        dataType: "json",
+                        data: $(this).serialize(),
+                        async: true,
+                        url: $(this).attr('action'),
+                        beforeSend: function () {
+                            $('#loading').show()
+                        },
+                        success: function (response) {
+                            setTimeout(function () {
+                                alert(response.message);
+                                modal.modal('hide');
+                                window.location = "{% url 'home' %}"
+                            }, 2000)
+
+                        },
+                        error: function (error) {
+                            console.log(error)
+                        }
+                    })
+                })
+            })
+        });
+        let modal_class = $('#sideModalTR');
+        $('.comment_form').click(function () {
+            let id = $(this).attr('id');
+            let uri_2 = 'comment/' + id + '/';
+            modal_class.load(uri_2, function () {
+                modal_class.modal('show');
+                $('#comment').submit(function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        method: 'POST',
+                        dataType: 'json',
+                        data: $(this).serialize(),
+                        url: uri_2,
+                        async: true,
+                        success: function (response) {
+                            alert(response.message);
+                            modal_class.modal('hide');
+                            window.location = "{% url 'home' %}"
+                        },
+                        error: function (error) {
+                            console.log(error)
+                        }
+                    })
+                })
+            })
+        });
+        let modal_3 = $('#edit_profile');
+        $('.profile').on('click', function () {
+            let id = $(this).attr('id');
+            let uri_3 = 'edit_profile';
+            modal_3.load(uri_3, function () {
+                modal_3.modal('show');
+                $('#upload').click(function (e) {
+                    e.preventDefault();
+                    $("#loader").fadeOut('fast');
+                    const my_form = $('#my_form')[0];
+                    const form_data = new FormData(my_form);
+                    $.ajax({
+                        method: "POST",
+                        dataType: 'json',
+                        contentType: false,
+                        processData: false,
+                        cache: false,
+                        data: form_data,
+                        async: true,
+                        url: uri_3,
+                        success: function (response) {
+                            alert(response.message);
+                            modal_3.modal('hide');
+                            window.location = "{% url 'home' %}"
+                        },
+                        error: function (e) {
+                            console.log(e.responseText)
+
+                        }
+                    })
+
+                })
+            })
+        });
+
+    })
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        setTimeout(function () {
+            $('#loader').fadeOut('slow')
+        }, 1000);
+        $(document).on('click', '.like', function (e) {
+            e.preventDefault();
+            let btn = $(this);
+            let pk = $(this).attr('value');
+            console.log('well done');
+            $.ajax({
+                method: 'GET',
+                dataType: 'json',
+                url: "like/" + pk + '/',
+                async: true,
+                success: function (response) {
+                    let like = btn.parent();
+                    like.html(response['form']);
+                    $.ajax({
+                        method: "GET",
+                        url: "{% url 'home' %}",
+                        success: function (data) {
+                            console.log('i am done')
+                        }
+                    })
+
+                },
+                error: function (error) {
+                    console.log(error.responseText)
+                },
+
+            })
+        });
+        let group_modal = $('#modalLoginForm');
+        let my_url = "{% url 'group' %}";
+        $('#create_group').click(function () {
+            group_modal.load(my_url, function () {
+                group_modal.modal('show');
+                $('#group').submit(function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        url: "{% url 'group' %}",
+                        method: "POST",
+                        dataType: 'json',
+                        data: $(this).serialize(),
+                        beforeSend: function () {
+                            $('#loading').show()
+                        },
+                        success: function (response) {
+                            setTimeout(function () {
+                                alert(response.message);
+                                group_modal.modal('hide');
+                                window.location = "{% url 'home' %}"
+                            }, 2000)
+                        },
+                        error: function (e) {
+                            console.log(e.responseText)
+                        }
+                    })
+                })
+            })
+        });
+        let mode_3 = $('#scroll');
+        $(document).on('click', '.click_group', function (e) {
+            e.preventDefault();
+            const pk = $(this).attr('href');
+            const url = `group_details/${pk}/`;
+            mode_3.load(url, function () {
+                mode_3.modal('show');
+                $('#create_post').click(function () {
+                    const url_2 = `create_group_post/${pk}/`;
+                    const my_form = $('.social_app');
+                    my_form.load(url_2, function () {
+                        console.log('i am done');
+                        $('#taofeek').submit(function (e) {
+                            e.preventDefault();
+                            $.ajax({
+                                method: "POST",
+                                url: `create_group_post/${pk}/`,
+                                dataType: 'json',
+                                data: $(this).serialize(),
+                                beforeSend: function () {
+                                    $('#loading').show();
+                                },
+                                success: function (data) {
+                                    setTimeout(function () {
+                                        alert(data.message);
+                                        mode_3.modal('hide')
+                                    }, 2000)
+                                }
+                            });
+
+                        })
+                    })
+                });
+                $('.join').click(function () {
+                    const my_pk = $(this).attr('id');
+                    $.ajax({
+                        method: 'GET',
+                        url: `join_group/${my_pk}/`,
+                        beforeSend: function () {
+                            $('#loading').show()
+                        },
+                        success: function (data) {
+                            setTimeout(function () {
+                                alert(data.message);
+                                mode_3.modal('hide')
+                            }, 1000)
+                        }
+                    })
+                });
+                $('.leave').click(function () {
+                    const my_pk = $(this).attr('id');
+                    $.ajax({
+                        method: 'GET',
+                        url: `leave_group/${my_pk}`,
+                        beforeSend: function () {
+                            $('#loading').show()
+                        },
+                        success: function (data) {
+                            setTimeout(function () {
+                                alert(data.message);
+                                mode_3.modal('hide')
+                            }, 1000)
+                        },
+                        error:function (e) {
+                            alert(e.responseText);
+                            $('#loading').hide()
+                        }
+                    })
+                })
+            })
+        });
+        let modal_1 = $('#fullHeightModalRight');
+        $('.comment').on('click', function (e) {
+            e.preventDefault();
+            let pk = $(this).attr('href');
+            console.log(pk);
+            modal_1.load(`comment_post/${pk}/`, function () {
+            modal_1.modal('show')
+            })
+        })
+    })
+
+</script>
+</html>

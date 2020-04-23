@@ -1,0 +1,50 @@
+
+{% block content %}
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header primary-color align-items-center text-white">
+        <h5 class="modal-title  " id="exampleModalLongTitle">{{ group.name }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center">
+            <h4><i class="fa fa-user">&nbsp; Owner</i><span class="float-right">{{ group.user }}</span></h4>
+        </div>
+          <div class="card text-center">
+          {% if user in group.members.all %}
+              <div class="card-body">
+                {% for post in posts %}
+              <div class="media">
+                  {% if post.author.image_url %}
+                      <img class="img-fluid post_img" src="{{ post.author.image_url.url }}" alt="">
+                      {% endif %}
+              <div class="media-body">
+                  <h6 class="">{{ post.author }}</h6>
+                  <p class="card-text">{{ post.post }}</p>
+                  <p><small class="text-muted">{{ post.created_at }}</small></p>
+              </div>
+              </div>
+                    <hr>
+              {% endfor %}
+              </div>
+              <div class="text-center align-items-center">
+              <button  id="create_post" class="btn btn-cyan ">Create Post</button>
+              <button  id="{{ group.pk }}" class="btn btn-elegant leave ">Leave Group</button>
+              </div>
+          {% else %}
+              <button  id="{{ group.pk }}" class="btn btn-amber join">JOIN GROUP</button>
+              {% endif %}
+          </div>
+          <div class="social_app">
+
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+<div id="loading" style="display: none"></div>
+{% endblock %}

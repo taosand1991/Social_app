@@ -1,0 +1,16 @@
+                <form id="like-section"  method="POST">
+                {% csrf_token %}
+                {% if request.user in post.likes.all %}
+              <button   name="post_id" value="{{ post.pk }}" type="submit" class="btn btn-red btn-sm like "  >
+              <i class="fa fa-thumbs-down"></i>
+              {{ post.likes.count }}
+              </button>
+                {% else %}
+               <button  value="{{ post.pk }}" name="post_id" type="submit" class="btn btn-primary btn-sm like" >
+               <i class="fa fa-thumbs-up"></i>
+               {{ post.likes.count }}
+               </button>
+                    </form>
+                {% endif %}
+
+

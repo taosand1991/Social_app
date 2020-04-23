@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row container-fluid postol">
+        <div class="col-12 col-md-6 mb-2 mt-2 post" >
+            {% include 'message.html' %}
+            {% for post in posts %}
+                <div class="media border " style="background: #cccccc">
+                    {% if post.author.image_url %}
+                        <img class=" mr-3 img-fluid" width="120px" src="{{ post.author.image_url.url }}"
+                             alt="Generic placeholder image">
+                    {% endif %}
+                    <div class="media-body">
+                        <h5 class="mt-0 font-weight-bold mt-2"><a
+                                href="{% url 'profile_detail' post.author %}">{{ post.author.display_name }}</a></h5>
+                        <p>{{ post.post }}</p>
+                        {% if post.picture %}
+                            <hr>
+                        <div class="col-12 col-md-3">
+                            <img class="img-fluid post-img" src="{{ post.picture.url }}" alt="No pic">
+                        </div>
+                        {% endif %}
+                        <p class="text-muted">{{ post.created_at }}</p>
+                        <div>
+                            {% if post.author == request.user %}
+                                <a class="btn btn-danger btn-sm btn-group" href="{% url 'delete' post.pk %}">Delete
+                                    Post</a>
+                                <a class="btn btn-success btn-sm btn-group postal" id="{{ post.pk }}">Edit Post</a>
+                            {% endif %}
+                        </div>
+                        <hr>
+                        <div>
+                            <h6><span class="fa fa-comment"></span><a class="comment_form" id="{{ post.pk }}" href="#">Add
+                                Comment</a>
+                                    <a class="comment" href="{{ post.pk }}"><span class="badge badge-success"
+                                          aria-haspopup="true">{{ post.comment_set.count }}</span></a>
+                            </h6>
+                        <div class="like-section">
+                            {% include 'media_app/like_section.html' %}
+                        </div>
+                        </div>
+                    </div>
+                </div><br>
+            {% empty %}
+                <div class="text-center justify-content-center card card-body">
+                    <p style="color: red">No posts for now !!!</p>
+                    <p class="text-center">click on add post to create your first post</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-3 col-12 mt-3">
+            <div class="card">
+                <div class="card-header text-center">
+                    <h5>Profile</h5>
+                </div>
+                <div class="card-body text-center">
+                    {% if request.user.image_url %}
+                        <img class="img-thumbnail mb-2 rounded-circle" width="90px"
+                             src="{{ request.user.image_url.url }}" alt="No picture">
+                    {% endif %}
+                    <h6 class="card-text"><span class="fa fa-user mr-3"></span><a
+                            href="{% url 'profile_detail' request.user %}">{{ request.user.display_name }}</a></h6>
+                    <h6 class="card-text"><span class="fa fa-address-book mr-3"></span>{{ request.user.email }}</h6>
+                    {% if request.user.date_of_birth %}
+                        <h6 class="card-text"><span class="fa fa-calendar mr-3"></span>{{ request.user.date_of_birth }}
+                        </h6>
+                    {% endif %}
+                    {% if request.user.location %}
+                        <h6 class="card-text"><span class="fa fa-address-card mr-3"></span>{{ request.user.location }}
+                        </h6>
+                    {% endif %}
+                    <a class="btn btn-deep-orange profile" id="{{ request.user.pk }}">Edit profile</a>
+                </div>
+            </div>
+
+        <div class="card text-center mt-2 post-group">
+            <h4 class="primary-color text-white card-header">Your Group(s)</h4>
+            <hr class="">
+            {% for group in groups %}
+            <h5><a class="textme" href="#">{{ group.name }}</a></h5>
+                <hr>
+                {% empty %}
+                <p>You have no group</p>
+            {% endfor %}
+        <div class="text-center mt-1 mb-1">
+                <button type="button" class="btn btn-deep-purple text-white" id="create_group">Create Group</button>
+            </div>
+        </div>
+        </div>
+    <div class="col-12 col-md-3 mt-3 ">
+        <div class="card">
+            <div class="card-header success-color-dark text-white text-center">Groups</div>
+            <div class="card-body">
+                {% for grp in grouping %}
+                <div class="list-group">
+                    <a id="" class="list-group-item list-group-item-action click_group" href="{{ grp.pk }}">{{ grp.name }}</a>
+                    {% if grp.user == request.user %}
+                    <a  class="btn btn-elegant" href="{% url 'delete_group' grp.pk %}">Delete</a>
+                    {% endif %}
+                </div>
+                    <hr>
+                    {% empty %}
+                    <h5>NO Groups!!!</h5>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal fade" id="post_form" tabindex="-1" role="dialog">
+
+    </div>
+
+    <div class="modal fade" id="edit_form" tabindex="-1" role="dialog">
+
+    </div>
+
+    <div class="modal fade right" id="sideModalTR" tabindex="-1" role="dialog"
+
+         aria-hidden="true">
+    </div>
+
+    <div class="modal fade bottom" id="edit_profile" tabindex="-1" role="dialog" aria-hidden="true">
+    </div>
+
+    <div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div class="modal fade" id="scroll" tabindex="-1" role="dialog" aria-hidden="true"></div>
+    <div class="modal fade right" id="fullHeightModalRight" tabindex="-1" role="dialog" aria-hidden="true"></div>
+{% endblock %}

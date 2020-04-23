@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+    <div class="row container col-12 col-md-6 offset-md-3 mt-4">
+<div class="card mt-3 ml-3 ">
+
+<h5 class="card-header info-color white-text text-center py-4 mb-2">
+    <strong>Sign up</strong>
+  </h5>
+  <div class="card-body px-lg-5 pt-0 posting ">
+    <form class="text-center " style="color: #757575;" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+        {% for error in field.errors %}
+        <p style="color:red;">{{ error }}</p>
+        {% endfor %}
+        {% endfor %}
+        {% bootstrap_form form %}
+      <div class="d-flex justify-content-around">
+        <div>
+          <a href="">Forgot password?</a>
+        </div>
+      </div>
+      <button class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect z-depth-0" type="submit">Sign Up</button>
+      <p>Existing  member?
+        <a href="{% url 'login' %}">Login</a>
+      </p>
+
+      <p>or sign in with:</p>
+      <a type="button" class="btn-floating btn-fb btn-sm">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a type="button" class="btn-floating btn-tw btn-sm">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a type="button" class="btn-floating btn-li btn-sm">
+        <i class="fab fa-linkedin-in"></i>
+      </a>
+      <a type="button" class="btn-floating btn-git btn-sm">
+        <i class="fab fa-github"></i>
+      </a>
+
+    </form>
+
+  </div>
+
+</div>
+</div>
+{% endblock %}

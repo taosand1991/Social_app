@@ -1,0 +1,8 @@
+{% load crispy_forms_tags %}
+
+<form class="text-center" id="taofeek" method="post">
+    <h5 class="success-color text-white mt-2">Create Post</h5>
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button id="my_button" type="submit" class="btn btn-elegant mt-1">submit</button>
+</form>

@@ -1,0 +1,39 @@
+{% block content %}
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Create Post</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <form id="myform" method="POST" class="form-group" enctype="multipart/form-data">
+              {% for field in form %}
+              {% for error in field.errors  %}
+              <p style="color: red">{{ error }}</p>
+              {% endfor %}
+                {% endfor %}
+              {% csrf_token %}
+              <div class="form-group">
+                  <div class="mt-2">{{ form.post }}</div>
+                  <hr>
+                  <div class="text-center">
+                      <p class="mb-2 text-center" style="color: red">Add a photo with a valid img/jpeg extension</p>
+                      {{ form.picture }}
+                  </div>
+              </div>
+              <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button id="click" type="submit" class="btn btn-primary">Create Post</button>
+      </div>
+          </form>
+      </div>
+
+    </div>
+  </div>
+<div id="loader" style="display: none"></div>
+
+{% endblock %}
+
+

@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row  col-12 col-md-8 mt-4 ml-md-4">
+<div class="card mx-3" style="width: 22rem">
+    <div class="view overlay">
+        {% if profile.image_url %}
+        <img src="{{ profile.image_url.url }}" alt="No pics" class="img-fluid card-img-top">
+        {% endif %}
+    </div>
+    <div class="card-body text-center elegant-color white-text rounded-bottom">
+        <h4 class="card-title"><span class="fa fa-user mr-4"></span>{{ profile.display_name }}</h4>
+        <hr class="hr-light">
+        <p class=""><span class="mr-4">@</span>{{ profile.email }}</p>
+        <p class=""><span class="fa fa-address-card mr-4"></span>{{ profile.location }}</p>
+        <hr class="hr-light">
+    <button class="btn btn-cyan btn-sm"><i class="fa fa-people-carry mr-5"></i>{{ profile.friends.count }} friends</button>
+
+    </div>
+
+</div>
+<div class="col-12 col-md-4 mt-4">
+<div class="card card-image"
+  style="background-image: url('{{ profile.image_url.url }}'); background-size: cover; width: 22rem">
+  <div class="text-white text-center d-flex align-items-center rgba-black-strong py-5 px-4">
+    <div class="text-center">
+      <h5 class="text-white text-center"><i class="fas fa-pen"></i> Biography</h5>
+        <hr class="hr-light">
+      <p>{{ profile.bio }}</p>
+    </div>
+  </div>
+</div>
+<a class="btn btn-outline-primary btn-block mt-2" href="{% url 'home' %}"><i class="fa fa-arrow-left mr-2"></i>Go back Home</a>
+</div>
+</div>
+
+{% endblock %}

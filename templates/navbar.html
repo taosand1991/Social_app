@@ -1,0 +1,66 @@
+{% load notification_count %}
+<nav class="navbar navbar-expand-lg navbar-dark primary-color">
+    <!-- Navbar brand -->
+    <a class="navbar-brand reload" href="#">Social App</a>
+    <!-- Collapse button -->
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+            aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+        <span class="close-icon py-1 ">X</span>
+    </button>
+    <div class="collapse navbar-collapse" id="basicExampleNav">
+        <ul class="navbar-nav mr-auto">
+            {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout ({{ request.user.display_name }})</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'signup' %}">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                </li>
+            {% endif %}
+        </ul>
+        <ul class="navbar-nav mr-auto">
+            {% if request.user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" data-target="tooltip" title="create post" id="mode" href="#"><span class="fa fa-plus">&nbsp;Add Post</span></a>
+                </li>
+                <li class="nav-item fad">
+                    <a data-target="tooltip" title="notifications" class="nav-link" href="{% url 'notification' %}"><span class="fa fa-bell">
+                    <span  class="badge badge-danger count">{{ request.user|notification_count }}</span></span></a>
+                </li>
+                <li class="nav-item">
+                    <a data-target="tooltip" title="friends request" class="nav-link" href="{% url 'notification' %}"><span class="fa fa-user-friends">
+                    <span  class="badge badge-danger">{{ request.user|friend_request}}</span></span></a>
+                </li>
+                 <li class="nav-item">
+                    <a data-target="tooltip" title="Groups" class="nav-link" href="#"><span class="fa fa-users">
+                    <span  class="badge badge-danger">{{ request.user | groups_count }}</span></span></a>
+                </li>
+                <li class="nav-item">
+                    <a data-target="tooltip" title="Change password" class="nav-link" href="{% url 'password_change' %}">Change Password</a>
+                </li>
+            {% endif %}
+        </ul>
+
+        {% if request.user.is_authenticated %}
+        <form action="{% url 'search' %}" class="form-inline" method="GET">
+            <div class="md-form my-0">
+                <input class="form-control mr-sm-2" name="q" type="text" placeholder="Search" aria-label="Search">
+            </div>
+            <button class="btn btn-deep-orange btn-sm">Search For Friends</button>
+        </form>
+    {% endif %}
+    </div>
+    <!-- Collapsible content -->
+</nav>
+<div class="modal fade" id="post_form" tabindex="-1" role="dialog">
+
+</div>
+<div id="loader" ></div>

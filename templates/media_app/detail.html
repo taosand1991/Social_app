@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-12 col-md-6 offset-md-3 mt-5">
+            <div class="card">
+                <div class="card-header text-center">
+                    {{ noti.type }}
+                </div>
+                <div class="card-body text-center">
+                    {% if noti.type == 'Friend request' %}
+                    <p class="card-text">{{ noti.text }}</p>
+                    <a class="btn btn-primary btn-group" href="{% url 'accept' noti.sender noti.pk %}">Accept Request</a>
+                    <a class="btn btn-danger btn-group" href="{% url 'cancel_friend' noti.sender noti.pk %}">Decline Request</a>
+                    {% elif noti.type == 'Friend Request Accepted' %}
+                    <p class="card-text">{{ noti.sender }} accepted Your friend request</p>
+                        {% elif noti.type == 'POST LIKE' %}
+                            {% if noti.sender == user.display_name %}
+                                <p class="card-text"> You liked your post</p>
+                                {% else %}
+                        <p class="card-text">{{ noti.sender }} liked your post</p>
+                                {% endif %}
+                    {% elif noti.type == "JOINED GROUP"  %}
+                        <p class="card-text">{{ noti.text }}</p>
+                    {% endif %}
+                    <a class="btn btn-outline-black" href="{% url 'del_note' noti.pk %}">click as read</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
