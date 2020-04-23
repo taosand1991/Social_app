@@ -1,5 +1,5 @@
 db.sqlite3
 .idea
-.env
-venv/
+/.env
+/venv/
 Social_media/secret_settings.py
