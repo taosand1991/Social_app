@@ -23,12 +23,6 @@
       <div class="modal-body">
           <form id="my_form" method="post" enctype="multipart/form-data">
               {% csrf_token %}
-{#              <label for="bio" class="form-check-label mt-2">Biography</label>#}
-{#              <div id="bio" class="bio mt-2">{{ form.bio }}</div>#}
-{#              <label for="location" class="form-check-label mt-2">Location</label>#}
-{#              <div id="location" class="location mt-2">{{ form.location }}</div>#}
-{#              <div id="image_url" class="image_url">{{ form.image_url }}</div>#}
-{#              <p class="text-muted" style="color: red !important;"><small>please upload a valid jpeg/png file</small></p>#}
               {{ form|crispy }}
               <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -39,5 +33,5 @@
 
     </div>
   </div>
-
+<div id="loading" style="display: none"></div>
 {% endblock %}

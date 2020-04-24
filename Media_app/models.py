@@ -1,10 +1,16 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, UserManager
 
 GENDER_CHOICES = (
     ('M', 'MALE'),
     ('F', 'FEMALE'),
 )
+
+
+class CustomUserManager(UserManager):
+    def get_by_natural_key(self, email):
+        case_insensitive_email_field = '{}__iexact'.format(self.model.EMAIL_FIELD)
+        return self.get(**{case_insensitive_email_field: email})
 
 
 class User(AbstractUser):
@@ -18,6 +24,8 @@ class User(AbstractUser):
     display_name = models.CharField(max_length=100)
     friends = models.ManyToManyField('self', related_name='friends')
     friend_requests = models.ManyToManyField('self', related_name='friend_requests')
+
+    objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'username', 'display_name']
@@ -37,7 +45,7 @@ class Notification(models.Model):
         return self.text
 
 
-class Post(models. Model):
+class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -86,4 +94,3 @@ class CommentGroup(models.Model):
 
     def __str__(self):
         return self.author.display_name
-

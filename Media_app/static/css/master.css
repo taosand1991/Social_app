@@ -17,6 +17,13 @@
     height: 550px !important;
 }
 
+@media only screen and (max-width: 768px) {
+    .no-post{
+    overflow: auto !important;
+    height: 500px !important;
+}
+}
+
 img.sizing{
     width: 400px !important;
     height: 200px !important;

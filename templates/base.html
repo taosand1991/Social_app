@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="{% static 'image/android-chrome-192x192.png' %}">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>{% block title %}{% endblock %}</title>
     <!-- Font Awesome -->
@@ -37,7 +38,7 @@
 </body>
 <script type="text/javascript">
     $(document).ready(function () {
-        {#console.log(Cookies.remove('modal'));#}
+        console.log(Cookies.get('sessionid'));
         $('#loader').fadeOut('slow');
         $(this).bind({
             ajaxStart: function () {
@@ -150,7 +151,6 @@
                 modal_3.modal('show');
                 $('#upload').click(function (e) {
                     e.preventDefault();
-                    $("#loader").fadeOut('fast');
                     const my_form = $('#my_form')[0];
                     const form_data = new FormData(my_form);
                     $.ajax({
@@ -162,10 +162,15 @@
                         data: form_data,
                         async: true,
                         url: uri_3,
+                        beforeSend:function(){
+                            $('#loading').show()
+                        },
                         success: function (response) {
+                            setTimeout(function () {
                             alert(response.message);
                             modal_3.modal('hide');
                             window.location = "{% url 'home' %}"
+                            }, 1000)
                         },
                         error: function (e) {
                             console.log(e.responseText)
@@ -322,7 +327,7 @@
             })
         });
         if(Cookies.get('modal') === undefined){
-            Cookies.set('modal', 'yes', {path:"{% url 'home' %}"});
+            Cookies.set('modal', 'yes', {path:"/"});
             setTimeout(function () {
             let my_url = "{% url 'people' %}";
             let modal = $('#frameModalBottom');
@@ -330,8 +335,6 @@
             modal.modal('show')
             })
         }, 5000)
-        }else{
-            Cookies.remove('modal')
         }
     })
 

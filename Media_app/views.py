@@ -60,7 +60,7 @@ def create_post(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            response = {'message': 'Your post has been posted'}
+            response = {'message': 'Your post has been created'}
             return JsonResponse(response)
         else:
             response = JsonResponse({'error': form.errors.as_json()})
@@ -125,7 +125,7 @@ def create_comment(request, pk):
 
 @login_required
 def like_post(request, pk):
-    user = request.user
+    user = User.objects.get(display_name=request.user)
     post = get_object_or_404(Post, pk=pk)
     if user in post.likes.all():
         post.likes.remove(user)
@@ -134,7 +134,7 @@ def like_post(request, pk):
         post.likes.add(user)
         sender = user.display_name
         user = user
-        if sender == user:
+        if sender == user.display_name:
             noti = Notification.objects.create(
                 sender=sender, type='POST LIKE', text=f'You liked your post',
                 user=user
@@ -355,7 +355,7 @@ def leave_group(request, pk):
 def delete_group(request, pk):
     group = get_object_or_404(Group, pk=pk)
     group.delete()
-    messages.success(request, f'You deleted your {group.name}')
+    messages.success(request, f'You deleted {group.name}')
     return redirect('home')
 
 
