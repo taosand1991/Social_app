@@ -26,8 +26,9 @@
 
 <!-- SCRIPTS -->
 <!-- JQuery -->
+{#<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js"></script>#}
 <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
-{#<script src="https://code.jquery.com/jquery-3.5.0.js" integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc=" crossorigin="anonymous"></script>#}
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
 <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
 <!-- Bootstrap core JavaScript -->
 <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -36,6 +37,7 @@
 </body>
 <script type="text/javascript">
     $(document).ready(function () {
+        {#console.log(Cookies.remove('modal'));#}
         $('#loader').fadeOut('slow');
         $(this).bind({
             ajaxStart: function () {
@@ -318,7 +320,19 @@
             modal_1.load(`comment_post/${pk}/`, function () {
             modal_1.modal('show')
             })
-        })
+        });
+        if(Cookies.get('modal') === undefined){
+            Cookies.set('modal', 'yes', {path:"{% url 'home' %}"});
+            setTimeout(function () {
+            let my_url = "{% url 'people' %}";
+            let modal = $('#frameModalBottom');
+            modal.load(my_url, function () {
+            modal.modal('show')
+            })
+        }, 5000)
+        }else{
+            Cookies.remove('modal')
+        }
     })
 
 </script>

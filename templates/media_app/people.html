@@ -1,0 +1,50 @@
+<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+
+
+    <div class="modal-content">
+        <div class="modal-header amber">
+            <h5 class="modal-title" id="exampleModalLongTitle">Friends You Might Know</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row search">
+                {% for friend in friends %}
+                    <div class="col-6 col-md-6 mt-2 ">
+                        <div class="card people-1">
+                            {% if friend.image_url %}
+                                <img class="card-img-top img-thumbnail sizing-2" src="{{ friend.image_url.url }}"
+                                     alt="No pic">
+                            {% endif %}
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-center"><a
+                                        href="{% url 'profile_detail' friend.display_name %}"></a>{{ friend.display_name }}
+                                </h5>
+                                <hr>
+                                <p class="text-center">{{ friend.location }}</p>
+                                {% if user in friend.friend_requests.all %}
+                                    <h3 class="text-muted">PENDING</h3>
+                                    <a class="btn btn-danger btn-sm" href="{% url 'canceled_request' friend.pk %}">CANCEL
+                                        FRIEND REQUEST</a>
+                                {% elif user in friend.friends.all %}
+                                    <p class="text-center"><small>{{ friend.email }}</small></p>
+                                {% else %}
+                                    <a class="btn btn-primary btn-sm" href="{% url 'add_friend' friend.pk %}">ADD
+                                        FRIEND</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="text-center">
+                        <h5 class="text-center">No Suggestion</h5>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+    </div>
+</div>

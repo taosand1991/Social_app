@@ -28,6 +28,7 @@ urlpatterns = [
     path('join_group/<int:pk>/', views.join_group, name='join_group'),
     path('leave_group/<int:pk>/', views.leave_group, name='leave_group'),
     path('delete_group/<int:pk>/', views.delete_group, name='delete_group'),
-    path('comment_post/<int:pk>/', views.show_comments, name='comment_post')
+    path('comment_post/<int:pk>/', views.show_comments, name='comment_post'),
+    path('people', views.people_you_know, name='people')
 
 ]

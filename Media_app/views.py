@@ -363,3 +363,9 @@ def show_comments(request, pk):
     post = Post.objects.get(pk=pk)
     comments = Comment.objects.filter(post=post)
     return render(request, 'media_app/comment_post.html', {'comments': comments})
+
+
+def people_you_know(request):
+    user = User.objects.get(display_name=request.user)
+    friends = User.objects.all().exclude(friends__display_name=user)
+    return render(request, 'media_app/people.html', {'friends': friends})
